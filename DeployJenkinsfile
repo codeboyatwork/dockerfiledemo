@@ -1,8 +1,8 @@
 node {
  def mvnHome = tool 'googlesdk-agent'
  stage("Init GCP"){
-  withCredentials([usernameColonPassword(credentialsId: 'gcr:ultra-resolver-320013-cloud-run', variable: 'usr')]) {
-    sh "'${mvnHome}/gcloud' auth activate-service-account --key-file ${usr}"
+  withCredentials([file(credentialsId: 'gcloud-run', variable: 'gcs')]) {
+    sh "'${mvnHome}/gcloud' auth activate-service-account --key-file ${gcs}"
   }
  }
  
