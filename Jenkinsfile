@@ -11,5 +11,6 @@ node {
 		    docker.withRegistry('https://gcr.io', 'ultra-resolver-320013-cloud-run') {
 		    dockerImage.push("${env.BUILD_NUMBER}")
 		    dockerImage.push("latest")
+		    }
 	    }
 }
