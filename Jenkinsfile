@@ -8,7 +8,7 @@ node {
 	      dockerImage = docker.build("ultra-resolver-320013/myapp:${env.BUILD_NUMBER}")
 	    }
   stage('Deploy Docker Image') {
-		    docker.withRegistry('https://gcr.io', 'ultra-resolver-320013-cloud-run') {
+		    docker.withRegistry('https://gcr.io', 'gcr:ultra-resolver-320013-cloud-run') {
 		    dockerImage.push("${env.BUILD_NUMBER}")
 		    dockerImage.push("latest")
 		    }
