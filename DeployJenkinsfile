@@ -1,0 +1,8 @@
+node {
+ def mvnHome = tool 'googlesdk-agent'
+stage("Deploy new image to Cloud Run"){
+            steps{
+                sh "'${mvnHome}/gcloud' run deploy myapp --image  gcr.io/ultra-resolver-320013/myapp:latest --platform=managed --region=us-central1 --port=8080 --revision-suffix=6"
+            }
+        }
+}
