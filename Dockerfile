@@ -1,2 +1,2 @@
 FROM nginx
-CMD ["echo", "Hello StackOverflow!"]
+CMD ["nginx", "-g", "daemon off;"]
