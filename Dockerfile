@@ -1,2 +1,2 @@
-FROM alpine
+FROM nginx
 CMD ["echo", "Hello StackOverflow!"]
