@@ -1,0 +1,41 @@
+pipeline{
+agent{
+label "${params.NODE_LABEL}"
+} 
+ parameters { 
+ string(name: 'NODE_LABEL', defaultValue: 'node-2004', description: 'This is the node where the execution will take place')
+ string(name: 'IMAGE_NAME', defaultValue: 'sbexample:latest', description: 'This is the name of the docker image which will be deployed to cloud run')
+ string(name: 'APP_NAME', defaultValue: 'sbexample', description: 'This is the name of the docker image which will be deployed to cloud run')
+ }  
+environment{
+gsdk = tool 'googlesdk-agent'
+LAST_CLOUD_RUN_REVISION = "${params.APP_NAME}-${currentBuild.previousBuild.getNumber()}"
+}
+stages {
+stage('Clone Repo') { // for display purposes
+      steps{
+        git 'https://github.com/codeboyatwork/dockerfiledemo.git'
+      }	      
+	    } 
+ stage("Init GCP"){
+ steps{
+  withCredentials([file(credentialsId: 'gcloud-run', variable: 'gcs')]) {
+    sh "'${gsdk}/gcloud' auth activate-service-account --key-file ${gcs}"
+    }
+  }
+  stage("Deploy new image to Cloud Run"){
+  steps{
+                sh "'${gsdk}/gcloud' run deploy '${params.APP_NAME}' --image  gcr.io/ultra-resolver-320013/'${params.IMAGE_NAME}' --platform=managed --region=us-central1 --port=80 --revision-suffix=${env.BUILD_NUMBER} --ingress=all --allow-unauthenticated"
+        }
+        }
+        
+  stage("Delete last Cloud Run revision"){
+            steps{
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh "yes | gcloud run revisions delete ${LAST_CLOUD_RUN_REVISION} --platform=managed --region=us-central1"
+                }
+            }
+        }
+ }
+}
+}
