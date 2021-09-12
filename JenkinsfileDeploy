@@ -23,6 +23,7 @@ stage('Clone Repo') { // for display purposes
     sh "'${gsdk}/gcloud' auth activate-service-account --key-file ${gcs}"
     }
   }
+  }
   stage("Deploy new image to Cloud Run"){
   steps{
                 sh "'${gsdk}/gcloud' run deploy '${params.APP_NAME}' --image  gcr.io/ultra-resolver-320013/'${params.IMAGE_NAME}' --platform=managed --region=us-central1 --port=80 --revision-suffix=${env.BUILD_NUMBER} --ingress=all --allow-unauthenticated"
