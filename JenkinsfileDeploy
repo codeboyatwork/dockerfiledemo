@@ -26,7 +26,7 @@ stage('Clone Repo') { // for display purposes
   }
   stage("Deploy new image to Cloud Run"){
   steps{
-                sh "'${gsdk}/gcloud' run deploy '${params.APP_NAME}' --image  gcr.io/ultra-resolver-320013/'${params.IMAGE_NAME}' --platform=managed --region=us-central1 --port=80 --revision-suffix=${env.BUILD_NUMBER} --ingress=all --allow-unauthenticated"
+                sh "'${gsdk}/gcloud' run deploy '${params.APP_NAME}' --image  gcr.io/ultra-resolver-320013/'${params.IMAGE_NAME}' --platform=managed --region=us-central1 --port=8080-revision-suffix=${env.BUILD_NUMBER} --ingress=all --allow-unauthenticated"
         }
         }
         
